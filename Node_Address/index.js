@@ -5,7 +5,7 @@ let mongoose = require('mongoose');
 let app = express();
 
 // DB setting
-mongoose.connect(process.env.MONGO_DB); // 1
+mongoose.connect('mongodb+srv://kangdy25:kangdy4173@cluster0.rl3qy.mongodb.net/myFirstDatabase?retryWrites=true&w=majority;') // 1
 let db = mongoose.connection; //2
 //3
 db.once('open', function(){
