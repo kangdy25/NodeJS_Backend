@@ -3,6 +3,7 @@
 let express = require('express');
 let router = express.Router();
 let User = require('../models/User');
+let util = require('../util'); // 1
 
 // Index // 1
 router.get('/', function(req, res){
@@ -26,7 +27,7 @@ router.post('/', function(req, res){
     User.create(req.body, function(err, user){
         if(err){
             req.flash('user', req.body);
-            req.flash('errors', parseError(err));
+            req.flash('errors', util.parseError(err)); // 1
             return res.redirect('/users/new');
         }
         res.redirect('/users');
@@ -75,7 +76,7 @@ router.put('/:username', function(req, res, next){
             if(err){
                 req.flash('user', req.body);
                 req.flash('errors', parseError(err));
-                return res.redirect('/users/'+req.params.username+'/edit');
+                return res.redirect('/users/'+req.params.username+'/edit'); // 1
             }
             res.redirect('/users/'+user.username);
             });

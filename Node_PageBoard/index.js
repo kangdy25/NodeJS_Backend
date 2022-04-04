@@ -4,8 +4,9 @@ let express = require('express');
 let mongoose = require('mongoose');
 let bodyParser = require('body-parser');
 let methodOverride = require('method-override');
-let flash = require('connect-flash'); // 1
-let session = require('express-session'); // 1
+let flash = require('connect-flash'); 
+let session = require('express-session'); 
+let passport = require('./config/passport'); //1
 let app = express();
 
 // DB setting
@@ -26,6 +27,17 @@ app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(flash()); // 2
 app.use(session({secret:'MySecret', resave:true, saveUninitialized:true})); //3
+
+// Passport // 2
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Custom Middlewares // 3
+app.use(function(req,res,next){
+    res.locals.isAuthenticated = req.isAuthenticated();
+    res.locals.currentUser = req.user;
+    next();
+});
 
 // Routes
 app.use('/', require('./routes/home'));
