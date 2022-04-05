@@ -6,7 +6,8 @@ let bodyParser = require('body-parser');
 let methodOverride = require('method-override');
 let flash = require('connect-flash'); 
 let session = require('express-session'); 
-let passport = require('./config/passport'); //1
+let passport = require('./config/passport'); 
+let util = require('./util');
 let app = express();
 
 // DB setting
@@ -41,8 +42,8 @@ app.use(function(req,res,next){
 
 // Routes
 app.use('/', require('./routes/home'));
-app.use('/posts', require('./routes/posts')); 
-app.use('/users', require('./routes/users')); // 1
+app.use('/posts', util.getPostQueryString, require('./routes/posts')); 
+app.use('/users', require('./routes/users')); 
 
 // Port setting
 let port = 3000;
