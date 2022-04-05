@@ -5,14 +5,28 @@ let router = express.Router();
 let Post = require('../models/Post');
 let util = require('../util'); 
 
-// Index 
-router.get('/', function(req, res){
-    Post.find({})          
-    .populate('author')        
-    .sort('-createdAt')            
-    .exec(function(err, posts){    
-        if(err) return res.json(err);
-        res.render('posts/index', {posts:posts});
+// Index
+router.get('/', async function(req, res){ // 1
+    let page = Math.max(1, parseInt(req.query.page));   // 2
+    let limit = Math.max(1, parseInt(req.query.limit)); // 2
+    page = !isNaN(page)?page:1;                         // 3
+    limit = !isNaN(limit)?limit:10;                     // 3
+
+    let skip = (page-1)*limit; // 4
+    let count = await Post.countDocuments({}); // 5
+    let maxPage = Math.ceil(count/limit); // 6
+    let posts = await Post.find({}) // 7
+        .populate('author')
+        .sort('-createdAt')
+        .skip(skip)   // 8
+        .limit(limit) // 8
+        .exec();
+    
+    res.render('posts/index', {
+        posts:posts,
+        currentPage:page, // 9
+        maxPage:maxPage,  // 9
+        limit:limit       // 9
     });
 });
 
