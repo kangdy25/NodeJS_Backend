@@ -3,26 +3,31 @@
 let express  = require('express');
 let router = express.Router();
 let Post = require('../models/Post');
+let User = require('../models/User');
 let util = require('../util'); 
 
 // Index
-router.get('/', async function(req, res){ 
-    let page = Math.max(1, parseInt(req.query.page));   
-    let limit = Math.max(1, parseInt(req.query.limit)); 
-    page = !isNaN(page)?page:1;                         
-    limit = !isNaN(limit)?limit:10;                     
+router.get('/', async function(req, res){
+    let page = Math.max(1, parseInt(req.query.page));
+    let limit = Math.max(1, parseInt(req.query.limit));
+    page = !isNaN(page)?page:1;
+    limit = !isNaN(limit)?limit:10;
 
-    let searchQuery = createSearchQuery(req.query); 
+    let skip = (page-1)*limit;
+    let maxPage = 0;
+    let searchQuery = await createSearchQuery(req.query);
+    let posts = [];
 
-    let skip = (page-1)*limit; 
-    let count = await Post.countDocuments(searchQuery);
-    let maxPage = Math.ceil(count/limit); 
-    let posts = await Post.find(searchQuery) 
-        .populate('author')
-        .sort('-createdAt')
-        .skip(skip)  
-        .limit(limit)
-        .exec();
+    if(searchQuery) {
+        let count = await Post.countDocuments(searchQuery);
+        maxPage = Math.ceil(count/limit);
+        posts = await Post.find(searchQuery)
+            .populate('author')
+            .sort('-createdAt')
+            .skip(skip)
+            .limit(limit)
+            .exec();
+    }
     
     res.render('posts/index', {
         posts:posts,
@@ -54,29 +59,13 @@ router.post('/', util.isLoggedin, function(req, res){
     });
 });
 
-function createSearchQuery(queries){ 
-    let searchQuery = {};
-    if(queries.searchType && queries.searchText && queries.searchText.length >= 2){
-        let searchTypes = queries.searchType.toLowerCase().split(',');
-        let postQueries = [];
-        if(searchTypes.indexOf('title')>=0){
-            postQueries.push({ title: { $regex: new RegExp(queries.searchText, 'i') } });
-        }
-        if(searchTypes.indexOf('body')>=0){
-            postQueries.push({ body: { $regex: new RegExp(queries.searchText, 'i') } });
-        }
-        if(postQueries.length > 0) searchQuery = {$or:postQueries};
-    }
-    return searchQuery;
-}
-
 // show
 router.get('/:id', function(req, res){
     Post.findOne({_id:req.params.id}) 
-        .populate('author')             
-        .exec(function(err, post){      
-            if(err) return res.json(err);
-            res.render('posts/show', {post:post});
+    .populate('author')             
+    .exec(function(err, post){      
+        if(err) return res.json(err);
+        res.render('posts/show', {post:post});
     });
 });
 
@@ -96,7 +85,7 @@ router.get('/:id/edit', util.isLoggedin, checkPermission, function(req, res){
     }
 });
 
-  // update
+// update
 router.put('/:id', util.isLoggedin, checkPermission, function(req, res){
     req.body.updatedAt = Date.now();
     Post.findOneAndUpdate({_id:req.params.id}, req.body, {runValidators:true}, function(err, post){
@@ -124,7 +113,36 @@ function checkPermission(req, res, next){
     Post.findOne({_id:req.params.id}, function(err, post){
         if(err) return res.json(err);
         if(post.author != req.user.id) return util.noPermission(req, res);
-    
+        
         next();
     });
+}
+
+async function createSearchQuery(queries){
+    let searchQuery = {};
+    if(queries.searchType && queries.searchText && queries.searchText.length >= 3){
+        let searchTypes = queries.searchType.toLowerCase().split(',');
+        let postQueries = [];
+        if(searchTypes.indexOf('title')>=0){
+            postQueries.push({ title: { $regex: new RegExp(queries.searchText, 'i') } });
+        }
+        if(searchTypes.indexOf('body')>=0){
+            postQueries.push({ body: { $regex: new RegExp(queries.searchText, 'i') } });
+        }
+        if(searchTypes.indexOf('author!')>=0){
+            let user = await User.findOne({ username: queries.searchText }).exec();
+            if(user) postQueries.push({author:user._id});
+        }
+        else if(searchTypes.indexOf('author')>=0){
+            let users = await User.find({ username: { $regex: new RegExp(queries.searchText, 'i') } }).exec();
+            let userIds = [];
+            for(let user of users){
+                userIds.push(user._id);
+            }
+            if(userIds.length>0) postQueries.push({author:{$in:userIds}});
+        }
+        if(postQueries.length>0) searchQuery = {$or:postQueries};
+        else searchQuery = null;
+    }
+    return searchQuery;
 }
