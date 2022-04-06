@@ -13,7 +13,7 @@ body {
     width: 100%;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* 1 */
+    text-overflow: ellipsis; 
 }
 
 .board-table {
@@ -25,7 +25,7 @@ body {
 }
 
 .post-body {
-    white-space: pre-line; /* 2 */
+    white-space: pre-line; 
 }
 
 .post-info {
@@ -43,4 +43,12 @@ body {
 .board-table .author,
 .board-table .date {
     width: 100px;
+}
+
+.post-index-tool {
+    max-width: 450px;
+}
+
+.post-index-tool input[type='text']{
+    max-width: 130px;
 }
