@@ -7,37 +7,38 @@ let Post = require('../models/Post');
 let util = require('../util');
 
 // create
-router.post('/', util.isLoggedin, checkPostId, function(req, res){ // 1
-    let post = res.locals.post; // 1-1
+router.post('/', util.isLoggedin, checkPostId, function(req, res){ 
+    let post = res.locals.post; 
 
-    req.body.author = req.user._id; // 2
-    req.body.post = post._id;       // 2
-
-Comment.create(req.body, function(err, comment){
-    if(err){
-        req.flash('commentForm', { _id: null, form:req.body });                 // 3
-        req.flash('commentError', { _id: null, errors:util.parseError(err) });  // 3
+    req.body.author = req.user._id; 
+    req.body.post = post._id;       
+    
+    Comment.create(req.body, function(err, comment){
+        if(err){
+            req.flash('commentForm', { _id: null, form:req.body });                 
+            req.flash('commentError', { _id:null, parentComment:req.body.parentComment, errors:util.parseError(err) });
     }
-    return res.redirect('/posts/'+post._id+res.locals.getPostQueryString()); //4
+    return res.redirect('/posts/'+post._id+res.locals.getPostQueryString()); 
     });
 });
 
-// update // 2
+// update 
 router.put('/:id', util.isLoggedin, checkPermission, checkPostId, function(req, res){
     var post = res.locals.post;
     
     req.body.updatedAt = Date.now();
+    
     Comment.findOneAndUpdate({_id:req.params.id}, req.body, {runValidators:true}, function(err, comment){
-    if(err){
-        req.flash('commentForm', { _id: req.params.id, form:req.body });
-        req.flash('commentError', { _id: req.params.id, errors:util.parseError(err) });
+        if(err){
+            req.flash('commentForm', { _id: req.params.id, form:req.body });
+            req.flash('commentError', { _id:req.params.id, parentComment:req.body.parentComment, errors:util.parseError(err) });
     }
     return res.redirect('/posts/'+post._id+res.locals.getPostQueryString());
     });
 });
 
 
-  // destroy // 3
+  // destroy 
 router.delete('/:id', util.isLoggedin, checkPermission, checkPostId, function(req, res){
     var post = res.locals.post;
 
@@ -57,7 +58,7 @@ router.delete('/:id', util.isLoggedin, checkPermission, checkPostId, function(re
 module.exports = router;
 
 // private functions
-function checkPermission(req, res, next){ // 1
+function checkPermission(req, res, next){ 
     Comment.findOne({_id:req.params.id}, function(err, comment){
         if(err) return res.json(err);
         if(comment.author != req.user.id) return util.noPermission(req, res);
@@ -66,11 +67,11 @@ function checkPermission(req, res, next){ // 1
     });
 }
 
-function checkPostId(req, res, next){ // 1
+function checkPostId(req, res, next){ 
     Post.findOne({_id:req.query.postId},function(err, post){
         if(err) return res.json(err);
 
-        res.locals.post = post; // 1-1
+        res.locals.post = post; 
         next();
     });
 }
