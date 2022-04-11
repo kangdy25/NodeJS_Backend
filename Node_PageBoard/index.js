@@ -27,13 +27,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(methodOverride('_method'));
 app.use(flash()); // 2
-app.use(session({secret:'MySecret', resave:true, saveUninitialized:true})); //3
+app.use(session({secret:'MySecret', resave:true, saveUninitialized:true})); 
 
 // Passport // 2
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Custom Middlewares // 3
+// Custom Middlewares 
 app.use(function(req, res, next){
     res.locals.isAuthenticated = req.isAuthenticated();
     res.locals.currentUser = req.user;
@@ -45,7 +45,8 @@ app.use(function(req, res, next){
 app.use('/', require('./routes/home'));
 app.use('/posts', util.getPostQueryString, require('./routes/posts')); 
 app.use('/users', require('./routes/users')); 
-app.use('/comments', util.getPostQueryString, require('./routes/comments')); // 1
+app.use('/comments', util.getPostQueryString, require('./routes/comments'));
+app.use('/files', require('./routes/files')); 
 
 // Port setting
 let port = 3000;
