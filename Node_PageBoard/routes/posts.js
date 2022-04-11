@@ -45,6 +45,8 @@ router.get('/', async function(req, res){
                 author: {
                     username: 1,
                 },
+                views: 1, // 1
+                numId: 1, // 1
                 createdAt: 1,
                 commentCount: { $size: '$comments'} // 10
             } },
@@ -83,15 +85,17 @@ router.post('/', util.isLoggedin, function(req, res){
 
 // show
 router.get('/:id', function(req, res){ // 2
-    var commentForm = req.flash('commentForm')[0] || {_id: null, form: {}};
-    var commentError = req.flash('commentError')[0] || { _id:null, parentComment: null, errors:{}};
+    let commentForm = req.flash('commentForm')[0] || {_id: null, form: {}};
+    let commentError = req.flash('commentError')[0] || { _id:null, parentComment: null, errors:{}};
 
     Promise.all([
         Post.findOne({_id:req.params.id}).populate({ path: 'author', select: 'username' }),
         Comment.find({post:req.params.id}).sort('createdAt').populate({ path: 'author', select: 'username' })
     ])
     .then(([post, comments]) => {
-        var commentTrees = util.convertToTrees(comments, '_id','parentComment','childComments');                               
+        post.views++; // 2
+        post.save();  // 2
+        let commentTrees = util.convertToTrees(comments, '_id','parentComment','childComments');                               
         res.render('posts/show', { post:post, commentTrees:commentTrees, commentForm:commentForm, commentError:commentError}); 
     })
     .catch((err) => {
