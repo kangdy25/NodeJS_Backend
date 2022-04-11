@@ -11,7 +11,7 @@ let postSchema = mongoose.Schema({ // 1
     views:{type:Number, default:0}, // 1
     numId:{type:Number}, // 2
     createdAt:{type:Date, default:Date.now}, // 2
-    updatedAt:{type:Date},
+    updatedAt:{type:Date}
 });
 
 postSchema.pre('save', async function (next){ // 3
