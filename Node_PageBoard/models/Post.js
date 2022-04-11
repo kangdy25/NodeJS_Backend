@@ -4,17 +4,18 @@ let mongoose = require('mongoose');
 let Counter = require('./Counter');
 
 // schema
-let postSchema = mongoose.Schema({ // 1
-    title:{type:String, required:[true,'Title is required!']}, // 1
-    body:{type:String, required:[true,'Body is required!']},   // 1,
-    author:{type:mongoose.Schema.Types.ObjectId, ref:'user', required:true}, // 1
-    views:{type:Number, default:0}, // 1
-    numId:{type:Number}, // 2
-    createdAt:{type:Date, default:Date.now}, // 2
+let postSchema = mongoose.Schema({ 
+    title:{type:String, required:[true,'Title is required!']}, 
+    body:{type:String, required:[true,'Body is required!']},   
+    author:{type:mongoose.Schema.Types.ObjectId, ref:'user', required:true}, 
+    views:{type:Number, default:0}, 
+    numId:{type:Number}, 
+    attachment:{type:mongoose.Schema.Types.ObjectId, ref:'file'},
+    createdAt:{type:Date, default:Date.now}, 
     updatedAt:{type:Date}
 });
 
-postSchema.pre('save', async function (next){ // 3
+postSchema.pre('save', async function (next){ 
     let post = this;
     if(post.isNew){
         counter = await Counter.findOne({name:'posts'}).exec();

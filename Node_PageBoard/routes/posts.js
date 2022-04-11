@@ -2,9 +2,12 @@
 
 let express  = require('express');
 let router = express.Router();
+var multer = require('multer'); 
+var upload = multer({ dest: 'uploadedFiles/' }); 
 let Post = require('../models/Post');
 let User = require('../models/User');
-let Comment = require('../models/Comment'); // 1
+let Comment = require('../models/Comment'); 
+var File = require('../models/File'); 
 let util = require('../util'); 
 
 // Index
@@ -23,32 +26,32 @@ router.get('/', async function(req, res){
         let count = await Post.countDocuments(searchQuery);
         maxPage = Math.ceil(count/limit);
         posts = await Post.aggregate([
-            { $match: searchQuery }, // 2
-            { $lookup: { // 3
+            { $match: searchQuery }, 
+            { $lookup: { 
                 from: 'users',
                 localField: 'author',
                 foreignField: '_id',
                 as: 'author'
             } },
-            { $unwind: '$author' }, // 4
-            { $sort : { createdAt: -1 } }, // 5
-            { $skip: skip }, // 6
-            { $limit: limit }, // 7
-            { $lookup: { // 8
+            { $unwind: '$author' }, 
+            { $sort : { createdAt: -1 } }, 
+            { $skip: skip }, 
+            { $limit: limit }, 
+            { $lookup: { 
                 from: 'comments',
                 localField: '_id',
                 foreignField: 'post',
                 as: 'comments'
             } },
-            { $project: { // 9
+            { $project: { 
                 title: 1,
                 author: {
                     username: 1,
                 },
-                views: 1, // 1
-                numId: 1, // 1
+                views: 1, 
+                numId: 1, 
                 createdAt: 1,
-                commentCount: { $size: '$comments'} // 10
+                commentCount: { $size: '$comments'} 
             } },
         ]).exec();
     }
@@ -71,7 +74,9 @@ router.get('/new', util.isLoggedin, function(req, res){
 });
 
   // create
-router.post('/', util.isLoggedin, function(req, res){
+router.post('/', util.isLoggedin, upload.single('attachment'), async function(req, res){ 
+    var attachment = req.file?await File.createNewInstance(req.file, req.user._id):undefined; 
+    req.body.attachment = attachment; 
     req.body.author = req.user._id;
     Post.create(req.body, function(err, post){
         if(err){
@@ -79,22 +84,26 @@ router.post('/', util.isLoggedin, function(req, res){
             req.flash('errors', util.parseError(err));
             return res.redirect('/posts/new'+res.locals.getPostQueryString());
         }
+        if(attachment){                 
+            attachment.postId = post._id; 
+            attachment.save();            
+        }                               
         res.redirect('/posts'+res.locals.getPostQueryString(false, {page:1, searchText:''}));
     });
 });
 
 // show
-router.get('/:id', function(req, res){ // 2
+router.get('/:id', function(req, res){ 
     let commentForm = req.flash('commentForm')[0] || {_id: null, form: {}};
     let commentError = req.flash('commentError')[0] || { _id:null, parentComment: null, errors:{}};
 
     Promise.all([
-        Post.findOne({_id:req.params.id}).populate({ path: 'author', select: 'username' }),
+        Post.findOne({_id:req.params.id}).populate({ path: 'author', select: 'username' }).populate({path:'attachment',match:{isDeleted:false}}), 
         Comment.find({post:req.params.id}).sort('createdAt').populate({ path: 'author', select: 'username' })
     ])
     .then(([post, comments]) => {
-        post.views++; // 2
-        post.save();  // 2
+        post.views++; 
+        post.save();  
         let commentTrees = util.convertToTrees(comments, '_id','parentComment','childComments');                               
         res.render('posts/show', { post:post, commentTrees:commentTrees, commentForm:commentForm, commentError:commentError}); 
     })
