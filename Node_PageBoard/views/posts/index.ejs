@@ -41,6 +41,9 @@
                                     <% if(post.commentCount){ %>
                                         <small class="title-comments d-inline-block pl-2">(<%= post.commentCount %>)</small>
                                     <% } %>
+                                    <% if(post.attachment){ %>
+                                        <small class="title-attachment d-inline-block pl-2">📁</small>
+                                    <% } %>
                                 </a>
                             </td>
                             <td class="views"><%= post.views %></td>
@@ -57,7 +60,9 @@
                 </tbody>
 
             </table>
+
             <div class="row mb-3">
+                
                 <div class="col-2">
                     <% if(isAuthenticated){ %> <!-- 1 -->
                         <a class="btn btn-primary" href="/posts/new<%= getPostQueryString() %>">New</a>
