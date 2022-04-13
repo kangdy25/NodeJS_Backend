@@ -4,7 +4,7 @@ This project was writed by refering [A MEAN BLOG](https://www.a-mean-blog.com/ko
 
 ### CRUD (Create, Read, Update, Delete)
 
-<img src = "img\1">
-<img src = "img\2">
-<img src = "img\3">
-<img src = "img\4">
+<img src = "img\1.png">
+<img src = "img\2.png">
+<img src = "img\3.png">
+<img src = "img\4.png">
