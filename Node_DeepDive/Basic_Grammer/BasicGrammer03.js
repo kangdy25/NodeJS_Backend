@@ -1,5 +1,3 @@
-// node Basic_Grammer/BasicGrammer03.js
-
 // Date() 
 const today = new Date();
 const date1 = new Date(2023, 4 - 1, 5);
