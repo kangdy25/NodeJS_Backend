@@ -1,5 +1,3 @@
-// node Basic_Grammer/BasicGrammer06.js
-
 // 난수 생성 (Random)
 const randomNumber = Math.random(); // Math.random()을 사용하면 0~1 범위 수를 반환한다.
 const zeroToNine = Math.floor(Math.random() * 10, 10); // 0 to 9
