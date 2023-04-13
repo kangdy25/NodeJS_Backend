@@ -1,5 +1,3 @@
-// node Basic_Grammer/BasicGrammer08.js
-
 // 특정 문자열 바꾸기 .replace()
 const greeting = 'hello';
 const dateString1 = '2023-04-13T10:17:00';
