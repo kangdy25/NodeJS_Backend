@@ -1,5 +1,3 @@
-// node Basic_Grammer/BasicGrammer07.js
-
 // 로그함수 log()   
 const log_1 = Math.log(10); // 이때 밑은 자연상수 e
 const log_2 = Math.log(1);
