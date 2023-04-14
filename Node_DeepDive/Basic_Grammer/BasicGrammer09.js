@@ -1,5 +1,3 @@
-// node Basic_Grammer/BasicGrammer09.js
-
 // 정규표현식(RegExp) \ 이스케이프
 // => 정규표현식은 /로 시작해서 /g로 끝나는 것이 기본이다.
 const string1 = '<h1>:::특별가 - 99,000원:::</h1>'
