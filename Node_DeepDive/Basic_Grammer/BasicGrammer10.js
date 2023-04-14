@@ -1,5 +1,3 @@
-// node Basic_Grammer/BasicGrammer10.js
-
 // 리스트 (list)
 const studentList = [
     {name: 'dongyoon', age: 23, score: 100},
