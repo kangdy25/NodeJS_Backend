@@ -1,5 +1,3 @@
-// node Functional_Programming/Recursion.js
-
 // 함수형 프로그래밍 내에서는 변수와 for문 사용을 가급적 최소화한다.
 // for문 대신 재귀함수를 사용하도록 한다.
 
