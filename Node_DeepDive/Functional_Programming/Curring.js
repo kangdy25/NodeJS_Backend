@@ -1,4 +1,3 @@
-// node Functional_Programming/Curring.js
 // 화살표 함수를 두 번 이상 사용하는 것을 커링(curring)이라고 한다.
 const returnFunction = () => (a, b) => a + b;
 const sum = returnFunction();
