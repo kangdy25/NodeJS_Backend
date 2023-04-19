@@ -1,5 +1,3 @@
-// node Functional_Programming/Function.js
-
 // filter() 사용법
 const ages = [11, 12, 13, 16, 21, 31];
 
