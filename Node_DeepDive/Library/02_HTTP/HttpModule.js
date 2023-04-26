@@ -49,7 +49,7 @@ const fs = require('fs');
 const http = require('http');
 
 http.createServer((req, res) => {
-    fs.readFile('./Library/HTTP/httpModule1.html', (error, data) => {
+    fs.readFile('./Library/02_HTTP/httpModule1.html', (error, data) => {
         res.writeHead(200, {'Content-Type': 'text/html'});
         res.end(data);
     });
@@ -65,7 +65,7 @@ const fs = require('fs');
 const http = require('http');
 
 http.createServer((req, res) => {
-    fs.readFile('./Library/HTTP/img.jpg', (error, data) => {
+    fs.readFile('./Library/02_HTTP/img.jpg', (error, data) => {
         res.writeHead(200, {'Content-Type': 'image/jpeg'});
         res.end(data);
     });
@@ -74,7 +74,7 @@ http.createServer((req, res) => {
 });
 
 http.createServer((req, res) => {
-    fs.readFile('./Library/HTTP/music.mp3', (error, data) => {
+    fs.readFile('./Library/02_HTTP/music.mp3', (error, data) => {
         res.writeHead(200, {'Content-Type': 'audio/mp3'});
         res.end(data);
     });
@@ -95,13 +95,13 @@ http.createServer((req, res) => {
     pathName = url.parse(req.url).pathName;
 
     if (pathName === '/') {
-        fs.readFile('./Library/HTTP/httpModule1.html', (error, data) => {
+        fs.readFile('./Library/02_HTTP/httpModule1.html', (error, data) => {
             res.writeHead(200, {'Content-Type': 'text/html'});
             res.end(data);
             console.log(url.parse(req.url));
         });
     } else if (pathName === '/example') {
-        fs.readFile('./Library/HTTP/httpModule2.html', (error, data) => {
+        fs.readFile('./Library/02_HTTP/httpModule2.html', (error, data) => {
             res.writeHead(200, {'Content-Type': 'text/html'});
             res.end(data);
             console.log(url.parse(req.url));
@@ -141,7 +141,7 @@ const fs = require('fs');
 
 http.createServer((req, res) => {
     if (req.method === 'GET') {
-        fs.readFile('./Library/HTTP/POST.html', (error, data)=>{
+        fs.readFile('./Library/02_HTTP/POST.html', (error, data)=>{
             res.writeHead(200, {'Content-Type' : 'text/html'});
             res.end(data);
             console.log(`${req.method}방식의 요청입니다.`);

@@ -2,14 +2,14 @@
 const fs = require('fs');
 
 const contents = 'hello\nbye\n안녕하세요';
-fs.writeFile('./Library/HandlingFile/message.txt', contents, 'utf-8', function(error) { //function(error) 추가해야 함
+fs.writeFile('./Library/01_FILE/message.txt', contents, 'utf-8', function(error) { //function(error) 추가해야 함
     console.log('write end!');
 });
 
 // 동기로 파일 열기 fs.readFileSync()
 const fs = require('fs');
 
-const data = fs.readFileSync('./Library/HandlingFile/message.txt');
+const data = fs.readFileSync('./Library/01_FILE/message.txt');
 const string = data.toString();
 console.log('sync work01');
 console.log(string);
@@ -17,7 +17,7 @@ console.log(string);
 // 비동기로 파일 열기 fs.readfile()
 const fs = require('fs');
 
-fs.readFile('./Library/HandlingFile/message.txt', (err, data) => {
+fs.readFile('./Library/01_FILE/message.txt', (err, data) => {
     if (err) throw err;
     console.log('sync work01');
     console.log(data.toString());
@@ -26,11 +26,11 @@ fs.readFile('./Library/HandlingFile/message.txt', (err, data) => {
 // 파일 내용 수정하기
 const fs = require('fs');
 
-fs.readFile('./Library/HandlingFile/message.txt', (err, data) => {
+fs.readFile('./Library/01_FILE/message.txt', (err, data) => {
     if (err) throw err;
     let contents = data.toString();
     contents = 'replaced test file';
-    fs.writeFile('./Library/HandlingFile/message.txt', contents, 'utf-8', function(error) { //function(error) 추가 
+    fs.writeFile('./Library/01_FILE/message.txt', contents, 'utf-8', function(error) { //function(error) 추가 
         console.log('replace end!');
     });
 });
@@ -39,7 +39,7 @@ fs.readFile('./Library/HandlingFile/message.txt', (err, data) => {
 const fs = require('fs');
 
 const list = [1, 2, 3, 4, 5];
-list.forEach(item => fs.appendFile('./Library/HandlingFile/Chapters.txt', `chapter ${item}\n`, function(error) {
+list.forEach(item => fs.appendFile('./Library/01_FILE/Chapters.txt', `chapter ${item}\n`, function(error) {
     console.log('write end!');
 }));
 
@@ -72,14 +72,14 @@ const userList = [
     {name: 'Dongyoon', age: 23},
     {name: 'Youngman', age: 23},
 ];
-fs.writeFile('./Library/HandlingFile/list.json', JSON.stringify(userList), 'utf-8', function(error) { //function(error) 추가해야 함
+fs.writeFile('./Library/01_FILE/list.json', JSON.stringify(userList), 'utf-8', function(error) { //function(error) 추가해야 함
     console.log('JSON!');
 });
 
 // 파일을 json 형식으로 불러오기, JSON.parse()
 const fs = require('fs');
 
-fs.readFile('./Library/HandlingFile/list.json', (err, data) => {
+fs.readFile('./Library/01_FILE/list.json', (err, data) => {
     if (err) throw err;
     const json  = JSON.parse(data.toString());
     console.log('name: ', json[0].name);
@@ -95,6 +95,6 @@ const renameFile = (fromFilePathName, toFilePathName) => {
     });
 };
 
-const fromFilePathName = './Library/HandlingFile/message.txt';
-const toFilePathName = './Library/HandlingFile/Bye.txt';
+const fromFilePathName = './Library/01_FILE/message.txt';
+const toFilePathName = './Library/01_FILE/Bye.txt';
 renameFile(fromFilePathName, toFilePathName);
