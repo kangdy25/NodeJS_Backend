@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "charset": "^1.0.1",
     "multer": "^1.4.4"
   }
 }
