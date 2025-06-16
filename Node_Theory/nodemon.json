@@ -1,0 +1,13 @@
+{
+  "watch": ["src", "config"],
+  "ext": "js, ts, css",
+  "ignore": [
+    "ignored.js",
+    "*.log",
+    "/temp/*"
+  ],
+  "exec": "node nodemons/app.js",
+  "env": {
+    "NODE_ENV": "development"
+  }
+}
