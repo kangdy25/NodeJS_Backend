@@ -1,5 +1,5 @@
-const counter = require('./counter');
+import { getCount, increment } from "./counter.js";
 
-console.log('1.', counter.getCount());
-counter.increment();
-console.log('2.', counter.getCount());
+console.log("1.", getCount());
+increment();
+console.log("2.", getCount());

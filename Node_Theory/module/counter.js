@@ -1,6 +1,4 @@
 let count = 0;
 
-module.exports = {
-  increment: () => count++,
-  getCount: () => count
-};
+export const increment = () => count++;
+export const getCount = () => count;
