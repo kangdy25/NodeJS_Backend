@@ -6,7 +6,7 @@
     "*.log",
     "/temp/*"
   ],
-  "exec": "node nodemons/app.js",
+  "exec": "node app.js",
   "env": {
     "NODE_ENV": "development"
   }
