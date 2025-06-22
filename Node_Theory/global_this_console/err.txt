@@ -1,0 +1,2 @@
+An error occurred!
+This is a warning message!
