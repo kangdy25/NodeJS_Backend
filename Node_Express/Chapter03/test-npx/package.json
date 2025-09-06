@@ -1,0 +1,16 @@
+{
+    "name": "test-npx",
+    "version": "1.0.0",
+    "bin": "./bin-prettier.js",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "prettier": "^3.6.2"
+    }
+}
