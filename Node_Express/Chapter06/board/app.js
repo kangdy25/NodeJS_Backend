@@ -14,6 +14,10 @@ app.get("/write", (req, res) => {
   res.render("write", { title: "테스트 게시판" });
 });
 
+app.get("/detail/:id", async (req, res) => {
+  res.render("detail", { title: "테스트 게시판" });
+});
+
 app.listen(3000, () => {
   console.log("SERVER START");
 });
