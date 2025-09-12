@@ -10,6 +10,10 @@ app.get("/", (req, res) => {
   res.render("home", { title: "테스트 게시판" });
 });
 
+app.get("/write", (req, res) => {
+  res.render("write", { title: "테스트 게시판" });
+});
+
 app.listen(3000, () => {
   console.log("SERVER START");
 });
