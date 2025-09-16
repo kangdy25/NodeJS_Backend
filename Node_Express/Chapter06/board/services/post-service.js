@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const paginator = require("../utils/paginator");
 
 // 글 작성
@@ -22,7 +23,23 @@ async function list(collection, page, search) {
     return [posts, paginatorObj];
 }
 
+const projectionOption = {
+    projection: {
+        password: 0,
+        "comments.password": 0,
+    },
+};
+
+async function getDetailPost(collection, id) {
+    return await collection.findOneAndUpdate(
+        { _id: ObjectId(id) },
+        { $inc: { hits: 1 } },
+        projectionOption
+    );
+}
+
 module.exports = {
     list,
     writePost,
+    getDetailPost,
 };
