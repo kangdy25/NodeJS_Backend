@@ -26,7 +26,6 @@ async function list(collection, page, search) {
 const projectionOption = {
     projection: {
         password: 0,
-        "comments.password": 0,
     },
 };
 
