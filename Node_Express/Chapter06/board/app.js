@@ -3,6 +3,7 @@ const express = require("express");
 const handlebars = require("express-handlebars");
 const mongodbConnection = require("./configs/mongodb-connection");
 const postService = require("./services/post-service");
+const { ObjectId } = require("mongodb");
 
 const app = express();
 
@@ -44,7 +45,7 @@ app.get("/", async (req, res) => {
 
 // 쓰기 페이지 이동
 app.get("/write", (req, res) => {
-    res.render("detail", { title: "테스트 게시판", mode: "create" });
+    res.render("write", { title: "테스트 게시판", mode: "create" });
 });
 
 // 글쓰기
@@ -96,6 +97,27 @@ app.post("/modify/", async (req, res) => {
     };
     const result = postService.updatePost(collection, id, post);
     res.redirect(`/detail/${id}`);
+});
+
+// 게시글 삭제
+app.delete("/delete", async (req, res) => {
+    const { id, password } = req.body;
+
+    try {
+        const result = await collection.deleteOne({
+            _id: ObjectId(id),
+            password: password,
+        });
+
+        if (result.deletedCount !== 1) {
+            console.log("삭제 실패");
+            return res.json({ isSuccess: false });
+        }
+        return res.json({ isSuccess: true });
+    } catch (err) {
+        console.error(err);
+        return res.json({ isSuccess: false });
+    }
 });
 
 let collection;
