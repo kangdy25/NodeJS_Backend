@@ -23,9 +23,10 @@
     </div>
     <section>
         <div>
-            <h3>3개의 댓글이 있습니다.</h3>
+            <h3>{{lengthOfList comments}}개의 댓글이 있습니다.</h3>
         </div>
         <form method="post" action="/write-comment">
+            <input type="hidden" name="id" value="{{_id}}"/>
             <div>
                 <div>
                     <input type="text" name="name" placeholder="이름" />
@@ -50,19 +51,20 @@
     </section>
 
     <section>
+        {{#each comments}}
         <div>
             <div>
-                작성자:
-                <b>댓글 작성자</b>
+                작성자: <b>{{name}}</b>
             </div>
             <div>
-                작성일시: 2025-09-12 16:18:00
-                <button onclick="deleteComment('1')">삭제</button>
+                작성일시: {{dateString createdDt}}
+                <button onclick="deleteComment('{{idx}}')">삭제</button>
             </div>
             <div>
                 <pre>{{comment}}</pre>
             </div>
         </div>
+        {{/each}}
     </section>
 
 {{/with}}

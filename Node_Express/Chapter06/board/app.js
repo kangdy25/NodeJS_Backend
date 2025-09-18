@@ -120,6 +120,34 @@ app.delete("/delete", async (req, res) => {
     }
 });
 
+app.post("/write-comment", async (req, res) => {
+    const { id, name, password, comment } = req.body;
+    const post = await postService.getPostById(collection, id);
+
+    if (post.comments) {
+        post.comments.push({
+            idx: post.comments.length + 1,
+            name,
+            password,
+            comment,
+            createdDt: new Date().toISOString(),
+        });
+    } else {
+        post.comments = [
+            {
+                idx: 1,
+                name,
+                password,
+                comment,
+                createdDt: new Date().toISOString(),
+            },
+        ];
+    }
+
+    postService.updatePost(collection, id, post);
+    return res.redirect(`/detail/${id}`);
+});
+
 let collection;
 app.listen(3000, async () => {
     console.log("SERVER START");
