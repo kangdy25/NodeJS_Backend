@@ -33,9 +33,12 @@ export class BlogController {
 
   // GET에 URL 매개변수에 id가 있는 요청 처리
   @Get('/:id')
-  getPost(@Param('id') id: string) {
+  async getPost(@Param('id') id: string) {
     console.log(`[id: ${id}게시글 하나 가져오기]`);
-    return this.blogService.getPost(id);
+
+    const post = await this.blogService.getPost(id);
+    console.log(post);
+    return post;
   }
 
   // DELETE 방식에 URL 매개변수로 id가 있는 요청 처리
