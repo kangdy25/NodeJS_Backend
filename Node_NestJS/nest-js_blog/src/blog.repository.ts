@@ -1,5 +1,6 @@
 import { readFile, writeFile } from 'fs/promises';
 import { PostDto } from './blog.model';
+import { Injectable } from '@nestjs/common';
 
 export interface BlogRepository {
   getAllPost(): Promise<PostDto[]>;
@@ -9,8 +10,9 @@ export interface BlogRepository {
   updatePost(id: string, postDto: PostDto);
 }
 
+@Injectable()
 export class BlogFileRepository implements BlogRepository {
-  FILE_NAME = './blog.data.json';
+  FILE_NAME = './src/blog.data.json';
 
   async getAllPost(): Promise<PostDto[]> {
     const datas = await readFile(this.FILE_NAME, 'utf8');
