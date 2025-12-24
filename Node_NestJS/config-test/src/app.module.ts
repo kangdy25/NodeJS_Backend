@@ -14,6 +14,7 @@ console.log('env : ' + process.env.NODE_ENV);
       envFilePath: `${process.cwd()}/envs/${process.env.NODE_ENV}.env`,
       load: [config],
       cache: true,
+      expandVariables: true,
     }),
     WeatherModule,
   ],
