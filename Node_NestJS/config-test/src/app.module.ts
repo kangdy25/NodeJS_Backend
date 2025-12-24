@@ -13,6 +13,7 @@ console.log('env : ' + process.env.NODE_ENV);
       isGlobal: true,
       envFilePath: `${process.cwd()}/envs/${process.env.NODE_ENV}.env`,
       load: [config],
+      cache: true,
     }),
     WeatherModule,
   ],
